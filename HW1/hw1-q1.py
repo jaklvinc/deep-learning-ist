@@ -45,9 +45,13 @@ class Perceptron(LinearModel):
         y_i (scalar): the gold label for that example
         other arguments are ignored
         """
-        # Q1.1a
-        raise NotImplementedError
+        # check if prediction is correct
+        predicted = self.predict(x_i)
 
+        # if not, update weights
+        if predicted != y_i:
+            self.W[y_i] += x_i
+            self.W[predicted] -= x_i
 
 class LogisticRegression(LinearModel):
     def update_weight(self, x_i, y_i, learning_rate=0.001):
