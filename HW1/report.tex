@@ -4,6 +4,8 @@
 \usepackage{amsmath, bm}
 \usepackage{float}
 \usepackage{hyperref, tikz}
+\usepackage{bm}
+\usepackage{tikz}
 \usetikzlibrary{calc}
 \setcounter{secnumdepth}{0}
 \DeclareMathOperator{\relu}{ReLU}
@@ -30,6 +32,15 @@
 \pagebreak
 \section{Question 1}
 \subsection{1. a)}
+The single perceptron was not the best choice for this task.
+As can be seen in the figure below, the perceptron was not able to fit to the high dimensional data also with no sign of improvement.
+With the 20 epochs, it ended up with a 0.3422 test accuracy.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.5\textwidth]{./plots/single_perceptron.png}
+  \caption{Single perceptron}\label{fig:single_layer_perceptron}
+\end{figure}
+
 \subsection{1. b)}
 \subsection{2. a)}
 \subsection{2. b)}
