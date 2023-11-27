@@ -6,6 +6,8 @@
 \usepackage{hyperref, tikz}
 \usetikzlibrary{calc}
 \setcounter{secnumdepth}{0}
+\DeclareMathOperator{\relu}{ReLU}
+\DeclareMathOperator{\sign}{sign}
 \begin{document}
 \begin{center}
   \mbox{}\\[2.0cm]
@@ -122,11 +124,11 @@ Let
 \end{align*}
 We have for $\bm{x}$:
 \begin{align*}
-  \bm{h}^{(2)} &= \text{sign} \left( \bm{W}^{(2)}\bm{h}^{(1)} + b^{(2)} \right) \\
-               &= \text{sign} \left( \bm{W}^{(2)} \left( \text{sign} \left( \bm{W}^{(1)} \bm{x} + \bm{b}^{(1)} \right) \right) + b^{(2)} \right) \\
-               &= \text{sign} \left( \begin{bmatrix}
+  \bm{h}^{(2)} &= \sign \left( \bm{W}^{(2)}\bm{h}^{(1)} + b^{(2)} \right) \\
+               &= \sign \left( \bm{W}^{(2)} \left( \sign \left( \bm{W}^{(1)} \bm{x} + \bm{b}^{(1)} \right) \right) + b^{(2)} \right) \\
+               &= \sign \left( \begin{bmatrix}
                                        1  &1
-                                     \end{bmatrix} \left( \text{sign} \left( \begin{bmatrix}
+                                     \end{bmatrix} \left( \sign \left( \begin{bmatrix}
                                                                                1  &1  &\cdots &1 \\
                                                                                -1 &-1 &\cdots &-1
                                                                              \end{bmatrix}
@@ -139,13 +141,93 @@ We have for $\bm{x}$:
                                    -A \\
                                    B
                                  \end{bmatrix} \right) \right) -1 \right) \\
-               &= \text{sign} \left( \begin{bmatrix}
+               &= \sign \left( \begin{bmatrix}
                                        1  &1
                                      \end{bmatrix} \begin{bmatrix}
-                                                                               \text{sign} \left( \sum_{i = 1}^{D} x_{i} - A \right) \\
-                                                                               \text{sign} \left( B - \sum_{i = 1}^{D} x_{i} \right)
+                                                                               \sign \left( \sum_{i = 1}^{D} x_{i} - A \right) \\
+                                                                               \sign \left( B - \sum_{i = 1}^{D} x_{i} \right)
                                                           \end{bmatrix} -1 \right) \\
-               &= \text{sign} \left( \text{sign} \left( \sum_{i = 1}^{D} x_{i} - A \right) + \text{sign} \left( B - \sum_{i = 1}^{D} x_{i} \right) -1 \right)
+               &= \sign \left( \sign \left( \sum_{i = 1}^{D} x_{i} - A \right) + \sign \left( B - \sum_{i = 1}^{D} x_{i} \right) -1 \right)
 \end{align*}
 \subsubsection{c)}
+\begin{figure*}[h!]
+\begin{tikzpicture}
+  \draw (0, 0) node[circle, minimum size=10mm, draw] (x1) {$x_{1}$};
+  \draw ($(x1) - (0, 1)$) node[circle, minimum size=10mm] (xd1) {$\vdots$};
+  \draw ($(xd1) - (0, 1)$) node[circle, minimum size=10mm, draw] (xi) {$x_{i}$};
+  \draw ($(xi) - (0, 1)$) node[circle, minimum size=10mm] (xd2) {$\vdots$};
+  \draw ($(xd2) - (0, 1)$) node[circle, minimum size=10mm, draw] (xD) {$x_{D}$};
+
+  \draw ($(x1.north) + (0, 0.5)$) node[circle, minimum size=10mm] (x) {$\bm{x}$};
+% h^(1)
+  \foreach \i in{1, 2}{
+    \draw ($(xd\i) + (4.5, 0)$) node[circle, minimum size=10mm, draw] (h1\i) {};
+    \foreach \j in {1, i, D}{
+      \draw[very thick, ->, shorten >=2mm] (x\j.east) -- (h1\i.west);
+    }
+  }
+  \draw ($(h11.north) + (0, 1.5)$) node[circle, minimum size=10mm] (h1) {$\bm{h}^{(1)}$};
+
+  \draw ($(h12) - (1.5, 2)$) node[circle, minimum size=10mm, draw] (b1) {$\bm{b}^{(1)}$};
+
+  \foreach \i in {1, 2}{
+    \draw[very thick, ->, shorten >=2mm, opacity=0.5] (b1.north) -- (h1\i.west);
+  }
+
+% h^(2)
+  \draw ($(h12) + (3, 1)$) node[circle, minimum size=10mm, draw] (h21) {};
+  \foreach \j in {1, 2}{
+    \draw[very thick, ->, shorten >=2mm] (h1\j.east) -- (h21.west);
+  }
+  \draw ($(h21.north) + (0, 2.5)$) node[circle, minimum size=10mm] (h2) {$\bm{h}^{(2)}$};
+
+  \draw ($(h21) - (1.5, 3)$) node[circle, minimum size=10mm, draw] (b2) {$b^{(2)}$};
+
+  \draw[very thick, ->, shorten >=2mm, opacity=0.5] (b2.north) -- (h21.west);
+
+  \draw ($(h1)!0.375!(x)$) node[circle, minimum size=10mm] {$\bm{W}^{(1)}$};
+  \draw ($(h1)!0.5!(h2)$) node[circle, minimum size=10mm] {$\bm{W}^{(2)}$};
+
+  \draw[very thick, shorten >=2mm, opacity=0.5] (h21.east) -- ++(1, 0);
+\end{tikzpicture}
+\end{figure*}
+\begin{align*}
+  \bm{W}^{(1)} &= \underbrace{\begin{bmatrix}
+                   -1  &-1  &\cdots &-1 \\
+                   1 &1 &\cdots &1
+                 \end{bmatrix}}_{2 \times D}, &\bm{b}^{(1)} &= \begin{bmatrix}
+                                                  A \\
+                                                  -B
+                                                 \end{bmatrix} \\
+  \bm{W}^{(2)} &= \begin{bmatrix}
+                   -1 & -1
+                 \end{bmatrix}, &\quad b^{(2)} &= 0
+\end{align*}
+We have for $\bm{x}$:
+\begin{align*}
+  \bm{h}^{(2)} &= \sign \left( \bm{W}^{(2)}\bm{h}^{(1)} + b^{(2)} \right) \\
+               &= \sign \left( \bm{W}^{(2)} \left( \relu \left( \bm{W}^{(1)} \bm{x} + \bm{b}^{(1)} \right) \right) + b^{(2)} \right) \\
+               &= \sign \left( \begin{bmatrix}
+                                       -1  &-1
+                               \end{bmatrix} \left( \relu \left( \begin{bmatrix}
+                                                                               -1  &-1  &\cdots &-1 \\
+                                                                               1 &1 &\cdots &1
+                                                                             \end{bmatrix}
+                 \begin{bmatrix}
+                   x_{1} \\
+                   x_{2} \\
+                   \vdots \\
+                   x_{D}
+                 \end{bmatrix} + \begin{bmatrix}
+                                   A \\
+                                   -B
+                                 \end{bmatrix} \right) \right) \right) \\
+               &= \sign \left( \begin{bmatrix}
+                                       -1  &-1
+                                     \end{bmatrix} \begin{bmatrix}
+                                                     \relu \left( A - \sum_{i = 1}^{D} x_{i} \right) \\
+                                                     \relu \left( \sum_{i = 1}^{D} x_{i} - B \right)
+                                                   \end{bmatrix} \right) \\
+               &= \sign \left( - \relu \left( A - \sum_{i = 1}^{D} x_{i} \right) - \relu \left( \sum_{i = 1}^{D} x_{i}  - B \right) \right)
+\end{align*}
 \end{document}
