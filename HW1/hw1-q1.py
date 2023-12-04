@@ -60,8 +60,19 @@ class LogisticRegression(LinearModel):
         y_i: the gold label for that example
         learning_rate (float): keep it at the default value for your plots
         """
-        # Q1.1b
-        raise NotImplementedError
+
+        # forward pass
+        scores = np.expand_dims(np.dot(self.W, x_i.T), axis=1)
+        probabilities = np.exp(scores) / np.sum(np.exp(scores))
+
+        y_one_hot = np.zeros(scores.shape)
+        y_one_hot[y_i] = 1
+
+        # loss
+        loss = (y_one_hot - probabilities).dot(np.expand_dims(x_i, axis=1).T)
+
+        # backward pass
+        self.W = self.W + learning_rate * loss
 
 
 class MLP(object):
