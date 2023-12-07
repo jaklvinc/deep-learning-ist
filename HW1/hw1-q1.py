@@ -81,13 +81,19 @@ class MLP(object):
     # in main().
     def __init__(self, n_classes, n_features, hidden_size):
         # Initialize an MLP with a single hidden layer.
-        raise NotImplementedError
+        self.W1 = np.random.normal(loc=0.1, scale=0.1**2, size=(hidden_size, n_features))
+        self.W2 = np.random.normal(loc=0.1, scale=0.1**2, size=(n_classes, hidden_size))
+        self.b1 = np.zeros(hidden_size)
+        self.b2 = np.zeros(n_classes)
 
     def predict(self, X):
         # Compute the forward pass of the network. At prediction time, there is
         # no need to save the values of hidden nodes, whereas this is required
         # at training time.
-        raise NotImplementedError
+        z1 = X.dot(self.W1.T) + self.b1
+        h1 = np.maximum(0, z1) # ReLU
+        z2 = h1.dot(self.W2.T) + self.b2
+        return z2.argmax(axis=1)
 
     def evaluate(self, X, y):
         """
@@ -104,7 +110,34 @@ class MLP(object):
         """
         Dont forget to return the loss of the epoch.
         """
-        raise NotImplementedError
+        loss = []
+        for x, y in zip(X, y):
+            # Forward pass
+            z1 = self.W1.dot(x) + self.b1
+            h1 = np.maximum(0, z1) # ReLU
+            z2 = self.W2.dot(h1) + self.b2
+            h2 = np.exp(z2 - np.max(z2)) / np.sum(np.exp(z2 - np.max(z2))) # Stable softmax
+            e_y = np.zeros(z2.shape)
+            e_y[y] = 1
+
+            loss.append(- e_y.dot(np.log(h2)))
+
+            # Backward pass
+            dz2 = h2 - e_y
+            dW2 = np.outer(dz2, h1)
+            db2 = dz2
+            dh1 = self.W2.T.dot(dz2)
+            dz1 = dh1 * (z1 > 0) #ReLU derivative
+            dW1 = np.outer(dz1, x)
+            db1 = dz1
+            
+            # Update
+            self.W1 -= learning_rate * dW1
+            self.b1 -= learning_rate * db1
+            self.W2 -= learning_rate * dW2
+            self.b2 -= learning_rate * db2
+
+        return np.mean(loss)
 
 
 def plot(epochs, train_accs, val_accs):
