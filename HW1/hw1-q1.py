@@ -81,19 +81,20 @@ class MLP(object):
     # in main().
     def __init__(self, n_classes, n_features, hidden_size):
         # Initialize an MLP with a single hidden layer.
-        self.W1 = np.random.normal(loc=0.1, scale=0.1**2, size=(hidden_size, n_features))
-        self.W2 = np.random.normal(loc=0.1, scale=0.1**2, size=(n_classes, hidden_size))
-        self.b1 = np.zeros(hidden_size)
-        self.b2 = np.zeros(n_classes)
+        self.W1 = np.random.normal(loc=0.1, scale=0.1, size=(hidden_size, n_features))
+        self.W2 = np.random.normal(loc=0.1, scale=0.1, size=(n_classes, hidden_size))
+        self.b1 = np.zeros((hidden_size, 1))
+        self.b2 = np.zeros((n_classes, 1))
 
     def predict(self, X):
         # Compute the forward pass of the network. At prediction time, there is
         # no need to save the values of hidden nodes, whereas this is required
         # at training time.
-        z1 = X.dot(self.W1.T) + self.b1
+        z1 = X.dot(self.W1.T) + self.b1.T
         h1 = np.maximum(0, z1) # ReLU
-        z2 = h1.dot(self.W2.T) + self.b2
-        return z2.argmax(axis=1)
+        z2 = h1.dot(self.W2.T) + self.b2.T
+        h2 = np.exp(z2 - np.max(z2)) / np.sum(np.exp(z2 - np.max(z2))) # Stable softmax
+        return h2.argmax(axis=1)
 
     def evaluate(self, X, y):
         """
@@ -113,6 +114,7 @@ class MLP(object):
         loss = []
         for x, y in zip(X, y):
             # Forward pass
+            x = np.expand_dims(x, axis=1)
             z1 = self.W1.dot(x) + self.b1
             h1 = np.maximum(0, z1) # ReLU
             z2 = self.W2.dot(h1) + self.b2
@@ -120,15 +122,15 @@ class MLP(object):
             e_y = np.zeros(z2.shape)
             e_y[y] = 1
 
-            loss.append(- e_y.dot(np.log(h2)))
+            loss.append(- e_y.T.dot(np.log(h2)))
 
             # Backward pass
             dz2 = h2 - e_y
-            dW2 = np.outer(dz2, h1)
+            dW2 = dz2.dot(h1.T)
             db2 = dz2
             dh1 = self.W2.T.dot(dz2)
             dz1 = dh1 * (z1 > 0) #ReLU derivative
-            dW1 = np.outer(dz1, x)
+            dW1 = dz1.dot(x.T)
             db1 = dz1
             
             # Update
@@ -161,7 +163,7 @@ def main():
     parser.add_argument('model',
                         choices=['perceptron', 'logistic_regression', 'mlp'],
                         help="Which model should the script run?")
-    parser.add_argument('-epochs', default=20, type=int,
+    parser.add_argument('-epochs', default=30, type=int,
                         help="""Number of epochs to train for. You should not
                         need to change this value for your plots.""")
     parser.add_argument('-hidden_size', type=int, default=200,

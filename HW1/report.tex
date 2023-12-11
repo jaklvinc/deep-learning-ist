@@ -52,7 +52,7 @@ There was however a big difference between the two learning rates.
 Where the model with the learning rate of 0.01 jumped faster to the higher accuracy, it did not improve on a regular basis.
 The 0.001 lr model was a bit slower to get up to higher accuracy, but it was able to consistently improve.
 In the end the 0.01 lr model ended up with 0.5784 test accuracy and the 0.001 lr model ended up with 0.5936 test accuracy.
-Running these models for more epochs would possibly improve the accuracy since the trainig was still showing signs of improvement even with the evaluation metric.
+Running these models for more epochs would possibly improve the accuracy since the training was still showing signs of improvement even with the evaluation metric.
 
 \begin{figure}
 \centering
@@ -79,7 +79,22 @@ The logistic regression is a linear model and therefore it can only learn linear
 The multi layer network can learn non-linear decision boundaries.
 However with it being non-linear there can be a problem with local minima for example, which we will not have with the linear model.
 \subsection{2. b)}
-
+As seen Figure \ref{fig:mlp2b}, we can see that the multilayer perceptron, as specified, is a better fit for the data, not only its accuracy on both training and validation data largely improves with each epoch, so does its training loss. It also shows a good test accuracy of $0.7580$ after $20$ epochs. Looking at the trend in both graphs, we can expect a better accuracy on the training/validation data with more epochs and possibly, taking care to avoid overfitting, a better testing accuracy.
+\begin{figure}
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{./plots/mlp_acc_per_epoch.png}
+  \caption{Training/Validation accuracy per epoch}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{./plots/mlp_loss_per_epoch.png}
+  \caption{Loss as a function of epoch number}
+\end{subfigure}
+\caption{MLP w/o Pytorch}
+\label{fig:mlp2b}
+\end{figure}
 \pagebreak
 \section{Question 2}
 \subsection{1.}
