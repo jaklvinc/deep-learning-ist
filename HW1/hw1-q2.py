@@ -27,8 +27,8 @@ class LogisticRegression(nn.Module):
         https://pytorch.org/docs/stable/nn.html
         """
         super().__init__()
-        # In a pytorch module, the declarations of layers needs to come after
-        # the super __init__ line, otherwise the magic doesn't work.
+        self.layer = nn.Linear(n_features, n_classes)
+        self.activation = nn.Softmax(dim=-1)
 
     def forward(self, x, **kwargs):
         """
@@ -44,7 +44,7 @@ class LogisticRegression(nn.Module):
         forward pass -- this is enough for it to figure out how to do the
         backward pass.
         """
-        raise NotImplementedError
+        return self.activation(self.layer(x))
 
 
 # Q2.2
@@ -97,7 +97,21 @@ def train_batch(X, y, model, optimizer, criterion, **kwargs):
     This function should return the loss (tip: call loss.item()) to get the
     loss as a numerical value that is not part of the computation graph.
     """
-    raise NotImplementedError
+    optimizer.zero_grad()
+
+    # forward pass
+    yhat = model(X)
+
+    # calculate loss
+    loss = criterion(yhat, y)
+
+    # backward pass
+    loss.backward()
+
+    # update parameters
+    optimizer.step()
+
+    return loss.item()
 
 
 def predict(model, X):
@@ -136,7 +150,7 @@ def plot(epochs, plottables, name='', ylim=None):
     plt.legend()
     if ylim:
         plt.ylim(ylim)
-    plt.savefig('%s.pdf' % (name), bbox_inches='tight')
+    plt.savefig('%s.pdf' % name, bbox_inches='tight')
 
 
 def main():
@@ -147,7 +161,7 @@ def main():
     parser.add_argument('-epochs', default=20, type=int,
                         help="""Number of epochs to train for. You should not
                         need to change this value for your plots.""")
-    parser.add_argument('-batch_size', default=1, type=int,
+    parser.add_argument('-batch_size', default=16, type=int,
                         help="Size of training batch.")
     parser.add_argument('-learning_rate', type=float, default=0.01)
     parser.add_argument('-l2_decay', type=float, default=0)
@@ -223,6 +237,7 @@ def main():
 
     _, test_acc = evaluate(model, test_X, test_y, criterion)
     print('Final Test acc: %.4f' % (test_acc))
+
     # plot
     if opt.model == "logistic_regression":
         config = (
