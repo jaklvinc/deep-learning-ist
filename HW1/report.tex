@@ -98,6 +98,57 @@ As seen Figure \ref{fig:mlp2b}, we can see that the multilayer perceptron, as sp
 \pagebreak
 \section{Question 2}
 \subsection{1.}
+After implementing the logistic regression with Pytorch, the best performing learning rate was 0.01.
+Again here it looks like 20 training epochs was not enough to get the best performance out of the model.
+In the graphs below, it is visible that the model was still improving on the training data.
+\begin{figure}
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/logistic_regression-training-loss-batch-16-lr-0.1-epochs-20-l2-0-opt-sgd}
+  \caption{Training/Validation loss per epoch}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/logistic_regression-validation-accuracy-batch-16-lr-0.1-epochs-20-l2-0-opt-sgd}
+  \caption{Validation accuracy per epoch}
+\end{subfigure}
+\caption{Logistic regression lr 0.1}
+\label{fig:regression_lr_0.1}
+\end{figure}
+
+\begin{figure}
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/logistic_regression-training-loss-batch-16-lr-0.01-epochs-20-l2-0-opt-sgd}
+  \caption{Training/Validation loss per epoch}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/logistic_regression-validation-accuracy-batch-16-lr-0.01-epochs-20-l2-0-opt-sgd}
+  \caption{Validation accuracy per epoch}
+\end{subfigure}
+\caption{Logistic regression lr 0.01}
+\label{fig:regression_lr_0.01}
+\end{figure}
+
+\begin{figure}
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/logistic_regression-training-loss-batch-16-lr-0.001-epochs-20-l2-0-opt-sgd}
+  \caption{Training/Validation loss per epoch}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/logistic_regression-validation-accuracy-batch-16-lr-0.001-epochs-20-l2-0-opt-sgd}
+  \caption{Validation accuracy per epoch}
+\end{subfigure}
+\caption{Logistic regression lr 0.01}
+\label{fig:regression_lr_0.001}
+\end{figure}
+
 \subsection{2. a)}
 \subsection{2. b)}
 \subsection{2. c)}
