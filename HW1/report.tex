@@ -227,6 +227,60 @@ The best performing learning rate was 0.01 with the final test accuracy of $0.75
 \end{figure}
 
 \subsection{2. c)}
+When training the network for 150 epochs and 256 batch size, the model gets to higher accuracies than the previous models.
+However in the trainig, validation loss graph we can see, that the trainig and validation loss start to diverge after around 60 epochs.
+This is a sign of overfitting.
+When comparing the L2 regularization and droupout regularization, the better final accuracy test is better with the L2 regularization.
+However the dropout regularization train/validation loss graph looks like it would still benefit from more training, since the training and validation loss are both still improving, and not diverging.
+The final test accuracy for the L2 regularization was $0.7864$ and for the dropout regularization it was $0.7845$.
+This makes both the models, the best performing models out of all the models trained in this question.
+\begin{figure}[h!]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/mlp-training-loss-batch-256-lr-0.1-epochs-150-hidden-200-dropout-0-l2-0-layers-1-act-relu-opt-sgd.pdf}
+  \caption{Training/Validation loss per epoch}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/mlp-validation-accuracy-batch-256-lr-0.1-epochs-150-hidden-200-dropout-0-l2-0-layers-1-act-relu-opt-sgd}
+  \caption{Validation accuracy per epoch}
+\end{subfigure}
+\caption{MLP overfitting}
+\label{fig:MLP_overfitting}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/mlp-training-loss-batch-256-lr-0.1-epochs-150-hidden-200-dropout-0.2-l2-0-layers-1-act-relu-opt-sgd.pdf}
+  \caption{Training/Validation loss per epoch}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/mlp-validation-accuracy-batch-256-lr-0.1-epochs-150-hidden-200-dropout-0.2-l2-0-layers-1-act-relu-opt-sgd}
+  \caption{Validation accuracy per epoch}
+\end{subfigure}
+\caption{MLP dropout}
+\label{fig:MLP_dropout}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/mlp-training-loss-batch-256-lr-0.1-epochs-150-hidden-200-dropout-0-l2-0.0001-layers-1-act-relu-opt-sgd.pdf}
+  \caption{Training/Validation loss per epoch}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/mlp-validation-accuracy-batch-256-lr-0.1-epochs-150-hidden-200-dropout-0-l2-0.0001-layers-1-act-relu-opt-sgd}
+  \caption{Validation accuracy per epoch}
+\end{subfigure}
+\caption{MLP L2 refularization}
+\label{fig:MLP_L2_regularization}
+\end{figure}
 \pagebreak
 \section{Question 3}
 \subsection{1.}
