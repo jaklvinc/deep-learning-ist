@@ -28,7 +28,6 @@ class LogisticRegression(nn.Module):
         """
         super().__init__()
         self.layer = nn.Linear(n_features, n_classes)
-        self.activation = nn.Softmax(dim=-1)
 
     def forward(self, x, **kwargs):
         """
@@ -44,7 +43,7 @@ class LogisticRegression(nn.Module):
         forward pass -- this is enough for it to figure out how to do the
         backward pass.
         """
-        return self.activation(self.layer(x))
+        return self.layer(x)
 
 
 # Q2.2
@@ -68,8 +67,7 @@ class FeedforwardNetwork(nn.Module):
         self.layers = nn.Sequential(nn.Linear(n_features, hidden_size),
                                     nn.Dropout(dropout),
                                     (nn.ReLU() if activation_type == 'relu' else nn.Tanh()),
-                                    nn.Linear(hidden_size, n_classes),
-                                    nn.Softmax(dim=-1))
+                                    nn.Linear(hidden_size, n_classes))
 
     def forward(self, x, **kwargs):
         """
