@@ -8,6 +8,10 @@ import torch
 from torch.utils.data import DataLoader
 import torch.nn as nn
 from matplotlib import pyplot as plt
+import timeit
+
+
+
 
 import utils
 
@@ -269,4 +273,6 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    elapsed_time = timeit.timeit(main, number=1)
+
+    print(f"Elapsed time: {elapsed_time} seconds")

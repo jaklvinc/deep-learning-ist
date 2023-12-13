@@ -152,7 +152,80 @@ Also it is noticable, how the 0.1 learning rate model had maybe too high of a le
 \end{figure}
 
 \subsection{2. a)}
+When training the MLP with Pytorch, the batch size of 16 trained slower than the batch size of 1024.
+The 16 batch size finished in $678$ seconds whereas the 1024 batch size finished in $353$ seconds.
+However, since the 16 batch size trained on overally more batches, it was able to perform a little bit better
+The final testing accuracy of the 16 batch size was $0.7372$ whereas the 1024 batch size was $0.7183$.
+Once again we can see here, that more epoch would probably improve the performance of the model.
+
+\begin{figure}[h!]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/mlp-training-loss-batch-16-lr-0.1-epochs-20-hidden-200-dropout-0-l2-0-layers-1-act-relu-opt-sgd}
+  \caption{Training/Validation loss per epoch}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/mlp-validation-accuracy-batch-16-lr-0.1-epochs-20-hidden-200-dropout-0-l2-0-layers-1-act-relu-opt-sgd}
+  \caption{Validation accuracy per epoch}
+\end{subfigure}
+\caption{MLP batch size 16}
+\label{fig:MLP_batch_size_16}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/mlp-training-loss-batch-1024-lr-0.1-epochs-20-hidden-200-dropout-0-l2-0-layers-1-act-relu-opt-sgd}
+  \caption{Training/Validation loss per epoch}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/mlp-validation-accuracy-batch-1024-lr-0.1-epochs-20-hidden-200-dropout-0-l2-0-layers-1-act-relu-opt-sgd}
+  \caption{Validation accuracy per epoch}
+\end{subfigure}
+\caption{MLP batch size 1024}
+\label{fig:MLP_batch_size_1024}
+\end{figure}
+
 \subsection{2. b)}
+Out of the four learning rates, the worst performing one was lr 1. This makes sense, since the gradient descent probably overshoots the minimum.
+The best performing learning rate was 0.01 with the final test accuracy of $0.7580$, whereas the learning rate of 1 had the final test accuracy of $0.4726$.
+
+\begin{figure}[h!]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/mlp-training-loss-batch-16-lr-0.01-epochs-20-hidden-200-dropout-0-l2-0-layers-1-act-relu-opt-sgd}
+  \caption{Training/Validation loss per epoch}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/mlp-validation-accuracy-batch-16-lr-0.01-epochs-20-hidden-200-dropout-0-l2-0-layers-1-act-relu-opt-sgd}
+  \caption{Validation accuracy per epoch}
+\end{subfigure}
+\caption{MLP lr 0.01}
+\label{fig:MLP_lr_0.01}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/mlp-training-loss-batch-16-lr-1.0-epochs-20-hidden-200-dropout-0-l2-0-layers-1-act-relu-opt-sgd}
+  \caption{Training/Validation loss per epoch}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/mlp-validation-accuracy-batch-16-lr-1.0-epochs-20-hidden-200-dropout-0-l2-0-layers-1-act-relu-opt-sgd}
+  \caption{Validation accuracy per epoch}
+\end{subfigure}
+\caption{MLP lr 1}
+\label{fig:MLP_lr_1}
+\end{figure}
+
 \subsection{2. c)}
 \pagebreak
 \section{Question 3}
