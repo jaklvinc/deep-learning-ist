@@ -37,35 +37,35 @@
 \section{Question 1}
 \subsection{1. a)}
 The single perceptron was not the best choice for this task.
-As can be seen in the figure below, the perceptron was not able to fit to the high dimensional data also with no sign of improvement.
+As can be seen in Figure \ref{fig:single_layer_perceptron} below, the perceptron was not able to fit to the high dimensional data also with no sign of improvement.
 With the 20 epochs, it ended up with a 0.3422 test accuracy which is slightly higher than 0.25 that would happen with random selection for 4 classes.
 Also the learning rate was left at the value of 1 so this might cause the problem as well.
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.5\textwidth]{./plots/single_perceptron.png}
+  \includegraphics[width=0.75\textwidth]{./plots/single_perceptron.png}
   \caption{Single perceptron}\label{fig:single_layer_perceptron}
 \end{figure}
 
 \subsection{1. b)}
 The logistic regression performed better than the single perceptron.
-As can be seen in the figure below, the logistic regression was able to fit to the data better.
+As can be seen in Figure \ref{fig:logistic_regression}, the logistic regression was able to fit to the data better.
 There was however a big difference between the two learning rates.
 Where the model with the learning rate of 0.01 jumped faster to the higher accuracy, it did not improve on a regular basis.
 The 0.001 lr model was a bit slower to get up to higher accuracy, but it was able to consistently improve.
 In the end the 0.01 lr model ended up with 0.5784 test accuracy and the 0.001 lr model ended up with 0.5936 test accuracy.
 Running these models for more epochs would possibly improve the accuracy since the training was still showing signs of improvement even with the evaluation metric.
 
-\begin{figure}
+\begin{figure}[h!]
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.9\linewidth]{./plots/logistic_regression_0.01.png}
+  \includegraphics[width=\linewidth]{./plots/logistic_regression_0.01.png}
   \caption{lr 0.01}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.9\linewidth]{./plots/logistic_regression_0.001.png}
+  \includegraphics[width=\linewidth]{./plots/logistic_regression_0.001.png}
   \caption{lr 0.001}
   \label{fig:sub2}
 \end{subfigure}
@@ -75,13 +75,13 @@ Running these models for more epochs would possibly improve the accuracy since t
 
 \subsection{2. a)}
 We do believe that the statement is correct.
-The multiplayer network can be more expressive than single layer logistic regression.
+The multilayer perceptron can be more expressive than logistic regression.
 The logistic regression is a linear model and therefore it can only learn linear decision boundaries.
-The multi layer network can learn non-linear decision boundaries.
-However with it being non-linear there can be a problem with local minima for example, which we will not have with the linear model.
+The multilayer perceptron can learn non-linear decision boundaries due to the $\relu$ activation.
+However, the logistic regression is a convex optimization problem whereas an MLP generally is not, making it easier to train and find the global minima in logistic regression.
 \subsection{2. b)}
 As seen Figure \ref{fig:mlp2b}, we can see that the multilayer perceptron, as specified, is a better fit for the data, not only its accuracy on both training and validation data largely improves with each epoch, so does its training loss. It also shows a good test accuracy of $0.7580$ after $20$ epochs. Looking at the trend in both graphs, we can expect a better accuracy on the training/validation data with more epochs and possibly, taking care to avoid overfitting, a better testing accuracy.
-\begin{figure}
+\begin{figure}[h!]
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
