@@ -9,6 +9,7 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{mathtools}
+\usepackage{verbatim}
 
 \usetikzlibrary{calc}
 \setcounter{secnumdepth}{0}
@@ -79,6 +80,7 @@ The multilayer perceptron can be more expressive than logistic regression.
 The logistic regression is a linear model and therefore it can only learn linear decision boundaries.
 The multilayer perceptron can learn non-linear decision boundaries due to the $\relu$ activation.
 However, the logistic regression is a convex optimization problem whereas an MLP generally is not, making it easier to train and find the global minima in logistic regression.
+
 \subsection{2. b)}
 As seen Figure \ref{fig:mlp2b}, we can see that the multilayer perceptron, as specified, is a better fit for the data, not only its accuracy on both training and validation data largely improves with each epoch, so does its training loss. It also shows a good test accuracy of $0.7580$ after $20$ epochs. Looking at the trend in both graphs, we can expect a better accuracy on the training/validation data with more epochs and possibly, taking care to avoid overfitting, a better testing accuracy.
 \begin{figure}[h!]
@@ -96,47 +98,50 @@ As seen Figure \ref{fig:mlp2b}, we can see that the multilayer perceptron, as sp
 \caption{MLP w/o Pytorch}
 \label{fig:mlp2b}
 \end{figure}
-\pagebreak
+
+\clearpage
+
 \section{Question 2}
 \subsection{1.}
 After implementing the logistic regression with Pytorch, the best performing learning rate was 0.001 with the final test accuracy of 0.6503.
 All the test accuracies are as follows 0.5577, 0.6200, 0.6503 in the order of learning rate 0.1, 0.01, 0.001.
 Again here it looks like 20 training epochs were not enough to get the best performance out of the model.
-In the graphs below, it is visible that the model was still improving on the training data.
-Also it is noticable, how the 0.1 learning rate model had maybe too high of a learning rate since on the graph, the validation accuracy is jumping all around.
-\begin{figure}
-\centering
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=.9\linewidth]{plots/logistic_regression-training-loss-batch-16-lr-0.1-epochs-20-l2-0-opt-sgd}
-  \caption{Training/Validation loss per epoch}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=.9\linewidth]{plots/logistic_regression-validation-accuracy-batch-16-lr-0.1-epochs-20-l2-0-opt-sgd}
-  \caption{Validation accuracy per epoch}
-\end{subfigure}
-\caption{Logistic regression lr 0.1}
-\label{fig:regression_lr_0.1}
-\end{figure}
+%In the graphs below, it is visible that the model was still improving on the training data.
+%Also it is noticable, how the 0.1 learning rate model had maybe too high of a learning rate since on the graph, the validation accuracy is jumping all around.
+\begin{comment}
+  \begin{figure}[h!]
+    \centering
+    \begin{subfigure}{.5\textwidth}
+      \centering
+      \includegraphics[width=.9\linewidth]{plots/logistic_regression-training-loss-batch-16-lr-0.1-epochs-20-l2-0-opt-sgd}
+      \caption{Training/Validation loss per epoch}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+      \centering
+      \includegraphics[width=.9\linewidth]{plots/logistic_regression-validation-accuracy-batch-16-lr-0.1-epochs-20-l2-0-opt-sgd}
+      \caption{Validation accuracy per epoch}
+    \end{subfigure}
+    \caption{Logistic regression lr 0.1}
+    \label{fig:regression_lr_0.1}
+  \end{figure}
 
-\begin{figure}
-\centering
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=.9\linewidth]{plots/logistic_regression-training-loss-batch-16-lr-0.01-epochs-20-l2-0-opt-sgd}
-  \caption{Training/Validation loss per epoch}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=.9\linewidth]{plots/logistic_regression-validation-accuracy-batch-16-lr-0.01-epochs-20-l2-0-opt-sgd}
-  \caption{Validation accuracy per epoch}
-\end{subfigure}
-\caption{Logistic regression lr 0.01}
-\label{fig:regression_lr_0.01}
-\end{figure}
-
-\begin{figure}
+  \begin{figure}
+    \centering
+    \begin{subfigure}{.5\textwidth}
+      \centering
+      \includegraphics[width=.9\linewidth]{plots/logistic_regression-training-loss-batch-16-lr-0.01-epochs-20-l2-0-opt-sgd}
+      \caption{Training/Validation loss per epoch}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+      \centering
+      \includegraphics[width=.9\linewidth]{plots/logistic_regression-validation-accuracy-batch-16-lr-0.01-epochs-20-l2-0-opt-sgd}
+      \caption{Validation accuracy per epoch}
+    \end{subfigure}
+    \caption{Logistic regression lr 0.01}
+    \label{fig:regression_lr_0.01}
+  \end{figure}
+\end{comment}
+\begin{figure}[h!]
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
@@ -148,16 +153,18 @@ Also it is noticable, how the 0.1 learning rate model had maybe too high of a le
   \includegraphics[width=.9\linewidth]{plots/logistic_regression-validation-accuracy-batch-16-lr-0.001-epochs-20-l2-0-opt-sgd}
   \caption{Validation accuracy per epoch}
 \end{subfigure}
-\caption{Logistic regression lr 0.01}
+\caption{Logistic regression lr 0.001}
 \label{fig:regression_lr_0.001}
 \end{figure}
+
+\pagebreak
 
 \subsection{2. a)}
 When training the MLP with Pytorch, the batch size of 16 trained slower than the batch size of 1024.
 The 16 batch size finished in $678$ seconds whereas the 1024 batch size finished in $353$ seconds.
 However, since the 16 batch size trained on overally more batches, it was able to perform a little bit better
 The final testing accuracy of the 16 batch size was $0.7372$ whereas the 1024 batch size was $0.7183$.
-Once again we can see here, that more epoch would probably improve the performance of the model.
+Once again we can see here, that more epochs would probably improve the performance of the model.
 
 \begin{figure}[h!]
 \centering
@@ -229,9 +236,9 @@ The best performing learning rate was 0.01 with the final test accuracy of $0.75
 
 \subsection{2. c)}
 When training the network for 150 epochs and 256 batch size, the model gets to higher accuracies than the previous models.
-However in the trainig, validation loss graph we can see, that the trainig and validation loss start to diverge after around 60 epochs.
+However in the training/validation loss graph (Figure \ref{fig:MLP_overfitting}) we can see, that the training and validation loss start to diverge after around 60 epochs.
 This is a sign of overfitting.
-When comparing the L2 regularization and droupout regularization, the better final accuracy test is better with the L2 regularization.
+When comparing the L2 regularization and dropout regularization, the better final test accuracy is the one with the L2 regularization.
 However the dropout regularization train/validation loss graph looks like it would still benefit from more training, since the training and validation loss are both still improving, and not diverging.
 The final test accuracy for the L2 regularization was $0.7864$ and for the dropout regularization it was $0.7845$.
 This makes both the models, the best performing models out of all the models trained in this question.
@@ -250,7 +257,6 @@ This makes both the models, the best performing models out of all the models tra
 \caption{MLP overfitting}
 \label{fig:MLP_overfitting}
 \end{figure}
-
 \begin{figure}[h!]
 \centering
 \begin{subfigure}{.5\textwidth}
@@ -279,11 +285,11 @@ This makes both the models, the best performing models out of all the models tra
   \includegraphics[width=.9\linewidth]{plots/mlp-validation-accuracy-batch-256-lr-0.1-epochs-150-hidden-200-dropout-0-l2-0.0001-layers-1-act-relu-opt-sgd}
   \caption{Validation accuracy per epoch}
 \end{subfigure}
-\caption{MLP L2 refularization}
+\caption{MLP L2 regularization}
 \label{fig:MLP_L2_regularization}
 \end{figure}
 
-\pagebreak
+\clearpage
 
 \section{Question 3}
 \subsection{1.}
