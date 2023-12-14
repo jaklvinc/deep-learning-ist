@@ -8,6 +8,7 @@
 \usepackage{tikz}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{mathtools}
 
 \usetikzlibrary{calc}
 \setcounter{secnumdepth}{0}
@@ -281,7 +282,9 @@ This makes both the models, the best performing models out of all the models tra
 \caption{MLP L2 refularization}
 \label{fig:MLP_L2_regularization}
 \end{figure}
+
 \pagebreak
+
 \section{Question 3}
 \subsection{1.}
 \subsubsection{a)}
@@ -293,7 +296,7 @@ Let
   \end{itemize}
   We have $f ( \bm{x}^{(1)}) = -1$, $f ( \bm{x}^{(2)}) = +1$, $f ( \bm{x}^{(3)}) = +1$ and $f ( \bm{x}^{(4)}) = -1$
 
-  \begin{figure}[h!]
+  \begin{figure}[H]
   \begin{tikzpicture}[xscale=2, yscale=2, domain=0.140:60,samples=800]
     \draw[->] (-2, 0) -- (2, 0) node[right] {$x$};
     \draw[->] (0, -2) -- (0, 2) node[above] {$y$};
@@ -309,7 +312,9 @@ Let
   \end{tikzpicture}
   \end{figure}
   Which we can see is not linearly separable and therefore a perceptron cannot learn a separating hyperplane.
+
 \pagebreak
+
 \subsubsection{b)}
 \begin{figure*}[h!]
 \begin{tikzpicture}
@@ -354,43 +359,92 @@ Let
 \end{figure*}
 \begin{align*}
   \bm{W}^{(1)} &= \underbrace{\begin{bmatrix}
-                   1  &1  &\cdots &1 \\
-                   -1 &-1 &\cdots &-1
+                   \text{---} &\bm{w}^{(1)}_{1}  &\text{---} \\
+                   \text{---} &\bm{w}^{(1)}_{2} &\text{---}
+                 \end{bmatrix}}_{2 \times D}, &\bm{b}^{(1)} &= \begin{bmatrix}
+                                                  b^{(1)}_{1} \\
+                                                  b^{(1)}_{2}
+                                                 \end{bmatrix} \\
+  \bm{W}^{(2)} &= \begin{bmatrix}
+                   w^{(2)}_{1} & w^{(2)}_{2}
+                 \end{bmatrix}, &\quad b^{(2)} &
+\end{align*}
+We have that $A \leq \sum_{i = 1}^{D} x_{i} \leq B$ iff
+\begin{itemize}
+\item $\sum_{i = 1}^{D} x_{i} \leq A \iff \sum_{i = 1}^{D} x_{i} - A \geq 0$ and
+\item $\sum_{i = 1}^{D} x_{i} \geq B \iff B - \sum_{i = 1}^{D} x_{i} \geq 0$.
+\end{itemize}
+Knowing that
+\begin{equation*}
+  \bm{h}^{(1)} = \sign \left( \bm{W}^{(1)} \bm{x} + \bm{b}^{(1)} \right) = \begin{bmatrix}
+                                                                             \sign \left( \bm{w}^{(1)}_{1} \bm{x} + b^{(1)}_{1} \right) \\
+                                                                             \sign \left( \bm{w}^{(1)}_{2} \bm{x} + b^{(1)}_{2} \right)
+                                                                           \end{bmatrix}
+                                                                         \end{equation*}
+We can set $\bm{W}^{(1)} = \begin{bsmallmatrix} 1 &\cdots &1 \\
+                       -1 &\cdots &-1 \end{bsmallmatrix}$ and $\bm{b}^{(1)} = \begin{bsmallmatrix}
+                                                                          - A \\
+                                                                          B                                                                       \end{bsmallmatrix}$ to get
+\begin{equation*}
+  \bm{h}^{(1)} = \begin{bmatrix}
+                   \sign \left( \sum_{i = 1}^{D} x_{i} - A \right) \\
+                   \sign \left( B - \sum_{i = 1}^{D} x_{i}  \right)
+                 \end{bmatrix}
+               \end{equation*}
+               which results in
+\begin{equation*}
+  \bm{h}^{(1)} = \begin{cases}
+                   \begin{bmatrix}
+                     +1 \\
+                     +1
+                   \end{bmatrix} &\text{if } A \leq \sum_{i = 1}^{D} x_{i} \leq B \\
+                                  \begin{bmatrix}
+                     -1 \\
+                     +1
+                                  \end{bmatrix} &\text{if } \sum_{i = 1}^{D} x_{i} < A \leq B \\
+                                                                 \begin{bmatrix}
+                     +1 \\
+                     -1
+                   \end{bmatrix} &\text{if } A \leq B < \sum_{i = 1}^{D} x_{i}
+                 \end{cases}
+\end{equation*}
+In order to learn the function $f$, we just need to choose $\bm{W}^{(2)}$ and $b^{(2)}$ such that
+\begin{align*}
+  \bm{h}^{(2)} &= \begin{cases}
+                   +1 &\text{if } \bm{h}^{(1)} =  \begin{bsmallmatrix}
+                     +1 \\
+                     +1
+                                                  \end{bsmallmatrix} \\
+                   -1 &\text{if } \bm{h}^{(1)} \neq  \begin{bsmallmatrix}
+                                                       +1 \\
+                                                       +1
+                                                     \end{bsmallmatrix} \\
+                  \end{cases} \\
+\end{align*}
+equivalently
+\begin{itemize}
+\item $\bm{W}^{(2)} \bm{h}^{(1)} + b^{(2)} \geq 0$ when $\bm{h}^{(1)} = \begin{bsmallmatrix}+1 \\ +1 \end{bsmallmatrix}$
+\item $\bm{W}^{(2)} \bm{h}^{(1)} + b^{(2)} < 0$ when $\bm{h}^{(1)} \neq \begin{bsmallmatrix} +1 \\ +1 \end{bsmallmatrix}$
+\end{itemize}
+Which we can achieve by
+\begin{enumerate}
+\item setting $\bm{W}^{(2)} = \begin{bmatrix}1 & 1\end{bmatrix}$, from which we get $\bm{W}^{(2)} \bm{h}^{(1)}$ equal to $2$, $0$ and $0$ for $\begin{bsmallmatrix} +1 \\ +1 \end{bsmallmatrix}$, $\begin{bsmallmatrix} -1 \\ +1 \end{bsmallmatrix}$ and $\begin{bsmallmatrix} +1 \\ -1 \end{bsmallmatrix}$ respectively, and
+\item setting $b^{(2)} = -1$, from which we get $\bm{W}^{(2)} \bm{h}^{(1)} + b^{(2)}$ equal to $1$, $-1$ and $-1$ for $\begin{bsmallmatrix} +1 \\ +1 \end{bsmallmatrix}$, $\begin{bsmallmatrix} -1 \\ +1 \end{bsmallmatrix}$ and $\begin{bsmallmatrix} +1 \\ -1 \end{bsmallmatrix}$ respectively.
+\end{enumerate}
+and so we learn our desired function with the weights and biases:
+\begin{align*}
+  \bm{W}^{(1)} &= \underbrace{\begin{bmatrix}
+                   1 &\cdots  &1 \\
+                   -1 &\cdots &-1
                  \end{bmatrix}}_{2 \times D}, &\bm{b}^{(1)} &= \begin{bmatrix}
                                                   -A \\
                                                   B
                                                  \end{bmatrix} \\
   \bm{W}^{(2)} &= \begin{bmatrix}
                    1 & 1
-                 \end{bmatrix}, &\quad b^{(2)} &= -1
+                 \end{bmatrix}, & b^{(2)} = -1
 \end{align*}
-We have for $\bm{x}$:
-\begin{align*}
-  \bm{h}^{(2)} &= \sign \left( \bm{W}^{(2)}\bm{h}^{(1)} + b^{(2)} \right) \\
-               &= \sign \left( \bm{W}^{(2)} \left( \sign \left( \bm{W}^{(1)} \bm{x} + \bm{b}^{(1)} \right) \right) + b^{(2)} \right) \\
-               &= \sign \left( \begin{bmatrix}
-                                       1  &1
-                                     \end{bmatrix} \left( \sign \left( \begin{bmatrix}
-                                                                               1  &1  &\cdots &1 \\
-                                                                               -1 &-1 &\cdots &-1
-                                                                             \end{bmatrix}
-                 \begin{bmatrix}
-                   x_{1} \\
-                   x_{2} \\
-                   \vdots \\
-                   x_{D}
-                 \end{bmatrix} + \begin{bmatrix}
-                                   -A \\
-                                   B
-                                 \end{bmatrix} \right) \right) -1 \right) \\
-               &= \sign \left( \begin{bmatrix}
-                                       1  &1
-                                     \end{bmatrix} \begin{bmatrix}
-                                                                               \sign \left( \sum_{i = 1}^{D} x_{i} - A \right) \\
-                                                                               \sign \left( B - \sum_{i = 1}^{D} x_{i} \right)
-                                                          \end{bmatrix} -1 \right) \\
-               &= \sign \left( \sign \left( \sum_{i = 1}^{D} x_{i} - A \right) + \sign \left( B - \sum_{i = 1}^{D} x_{i} \right) -1 \right)
-\end{align*}
+\pagebreak
 \subsubsection{c)}
 \begin{figure*}[h!]
 \begin{tikzpicture}
@@ -435,41 +489,79 @@ We have for $\bm{x}$:
 \end{figure*}
 \begin{align*}
   \bm{W}^{(1)} &= \underbrace{\begin{bmatrix}
-                   -1  &-1  &\cdots &-1 \\
-                   1 &1 &\cdots &1
+                   \text{---} &\bm{w}^{(1)}_{1}  &\text{---} \\
+                   \text{---} &\bm{w}^{(1)}_{2} &\text{---}
+                 \end{bmatrix}}_{2 \times D}, &\bm{b}^{(1)} &= \begin{bmatrix}
+                                                  b^{(1)}_{1} \\
+                                                  b^{(1)}_{2}
+                                                 \end{bmatrix} \\
+  \bm{W}^{(2)} &= \begin{bmatrix}
+                   w^{(2)}_{1} & w^{(2)}_{2}
+                 \end{bmatrix}, &\quad b^{(2)} &
+\end{align*}
+We have that $A \leq \sum_{i = 1}^{D} x_{i} \leq B$ iff
+\begin{itemize}
+\item $\sum_{i = 1}^{D} x_{i} \leq A \iff A - \sum_{i = 1}^{D} x_{i} \geq 0$ and
+\item $\sum_{i = 1}^{D} x_{i} \geq B \iff \sum_{i = 1}^{D} x_{i} - B \geq 0$.
+\end{itemize}
+Knowing that
+\begin{equation*}
+  \bm{h}^{(1)} = \relu \left( \bm{W}^{(1)} \bm{x} + \bm{b}^{(1)} \right) = \begin{bmatrix}
+                                                                             \relu \left( \bm{w}^{(1)}_{1} \bm{x} + b^{(1)}_{1} \right) \\
+                                                                             \relu \left( \bm{w}^{(1)}_{2} \bm{x} + b^{(1)}_{2} \right)
+                                                                           \end{bmatrix}
+                                                                         \end{equation*}
+We can set $\bm{W}^{(1)} = \begin{bsmallmatrix} -1 &\cdots &-1 \\
+                       1 &\cdots &1 \end{bsmallmatrix}$ and $\bm{b}^{(1)} = \begin{bsmallmatrix}
+                                                                          A \\
+                                                                          -B                                                                       \end{bsmallmatrix}$ to get
+\begin{equation*}
+  \bm{h}^{(1)} = \begin{bmatrix}
+                   \relu \left( A - \sum_{i = 1}^{D} x_{i} \right) \\
+                   \relu \left( \sum_{i = 1}^{D} x_{i} - B \right)
+                 \end{bmatrix}
+\end{equation*}
+which results in
+\begin{equation*}
+  \bm{h}^{(1)} = \begin{bmatrix}
+                   h^{(1)}_{1} \\
+                   h^{(1)}_{2}
+                 \end{bmatrix} \text{where }
+                 \begin{cases}
+                   h_{1}^{(1)} = 0 &\text{if } \sum_{i = 1}^{D} x_{i} \geq A \\
+                   h_{1}^{(1)} > 0 &\text{if } \sum_{i = 1}^{D} x_{i} < A \\
+                   h_{2}^{(1)} = 0 &\text{if } \sum_{i = 1}^{D} x_{i} \leq B \\
+                   h_{2}^{(1)} > 0 &\text{if } \sum_{i = 1}^{D} x_{i} > B
+                 \end{cases}
+\end{equation*}
+In order to learn the function, we just need to choose $\bm{W}^{(2)}$ and $b^{(2)}$ such that
+\begin{align*}
+  \bm{h}^{(2)} &= \begin{cases}
+                    +1 &\text{if } \bm{h}^{(1)} =  \begin{bsmallmatrix}
+                                                     0 \\
+                                                     0
+                                                   \end{bsmallmatrix} \\
+                    -1 &\text{otherwise}
+                  \end{cases} \\
+\end{align*}
+equivalently
+\begin{itemize}
+\item $\bm{W}^{(2)} \bm{h}^{(1)} + b^{(2)} \geq 0$ when $\bm{h}^{(1)} = \begin{bsmallmatrix} 0 \\ 0 \end{bsmallmatrix}$
+\item $\bm{W}^{(2)} \bm{h}^{(1)} + b^{(2)} < 0$ when $\bm{h}^{(1)} \neq \begin{bsmallmatrix} 0 \\ 0 \end{bsmallmatrix}$
+\end{itemize}
+Knowing that $h^{(1)}_{1} \geq 0$ and $h^{(1)}_{2} \geq 0$ we just need to set  $\bm{W}^{(2)} = \begin{bmatrix} - 1 & -1 \end{bmatrix}$ and $b^{(2)} = 0$, from which we get $\bm{W}^{(2)} \bm{h}^{(1)} + b^{(2)}$ equal to $0$ when $\bm{h}^{(1)} = \begin{bsmallmatrix} 0 \\ 0 \end{bsmallmatrix}$, and negative otherwise.
+
+and so we learn our desired function with the weights and biases:
+\begin{align*}
+  \bm{W}^{(1)} &= \underbrace{\begin{bmatrix}
+                   -1 &\cdots  &-1 \\
+                   1 &\cdots &1
                  \end{bmatrix}}_{2 \times D}, &\bm{b}^{(1)} &= \begin{bmatrix}
                                                   A \\
                                                   -B
                                                  \end{bmatrix} \\
   \bm{W}^{(2)} &= \begin{bmatrix}
                    -1 & -1
-                 \end{bmatrix}, &\quad b^{(2)} &= 0
-\end{align*}
-We have for $\bm{x}$:
-\begin{align*}
-  \bm{h}^{(2)} &= \sign \left( \bm{W}^{(2)}\bm{h}^{(1)} + b^{(2)} \right) \\
-               &= \sign \left( \bm{W}^{(2)} \left( \relu \left( \bm{W}^{(1)} \bm{x} + \bm{b}^{(1)} \right) \right) + b^{(2)} \right) \\
-               &= \sign \left( \begin{bmatrix}
-                                       -1  &-1
-                               \end{bmatrix} \left( \relu \left( \begin{bmatrix}
-                                                                               -1  &-1  &\cdots &-1 \\
-                                                                               1 &1 &\cdots &1
-                                                                             \end{bmatrix}
-                 \begin{bmatrix}
-                   x_{1} \\
-                   x_{2} \\
-                   \vdots \\
-                   x_{D}
-                 \end{bmatrix} + \begin{bmatrix}
-                                   A \\
-                                   -B
-                                 \end{bmatrix} \right) \right) \right) \\
-               &= \sign \left( \begin{bmatrix}
-                                       -1  &-1
-                                     \end{bmatrix} \begin{bmatrix}
-                                                     \relu \left( A - \sum_{i = 1}^{D} x_{i} \right) \\
-                                                     \relu \left( \sum_{i = 1}^{D} x_{i} - B \right)
-                                                   \end{bmatrix} \right) \\
-               &= \sign \left( - \relu \left( A - \sum_{i = 1}^{D} x_{i} \right) - \relu \left( \sum_{i = 1}^{D} x_{i}  - B \right) \right)
+                 \end{bmatrix}, & b^{(2)} = 0
 \end{align*}
 \end{document}
