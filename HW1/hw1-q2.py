@@ -69,10 +69,12 @@ class FeedforwardNetwork(nn.Module):
         """
         super().__init__()
         self.layers = nn.Sequential(nn.Linear(n_features, hidden_size),
-                                    nn.Dropout(dropout),
                                     (nn.ReLU() if activation_type == 'relu' else nn.Tanh()),
+                                    nn.Dropout(dropout),
+                                    *[nn.Linear(hidden_size, hidden_size),
+                                      (nn.ReLU() if activation_type == 'relu' else nn.Tanh()),
+                                      nn.Dropout(dropout)]*(layers-1),
                                     nn.Linear(hidden_size, n_classes))
-
     def forward(self, x, **kwargs):
         """
         x (batch_size x n_features): a batch of training examples
