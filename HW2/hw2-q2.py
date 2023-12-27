@@ -22,39 +22,41 @@ class CNN(nn.Module):
         self.no_maxpool = no_maxpool
         if not no_maxpool:
             # Implementation for Q2.1
-            raise NotImplementedError
+            self.conv1 = nn.Conv2d(in_channels=1, out_channels=8, kernel_size=(3,3), stride=1, padding=1) # Padding chosen to preserve img original size
+            self.conv2 = nn.Conv2d(in_channels=8, out_channels=16, kernel_size=(3,3), stride=1)
         else:
             # Implementation for Q2.2
-            raise NotImplementedError
+            self.conv1 = nn.Conv2d(in_channels=1, out_channels=8, kernel_size=(3,3), stride=2, padding=1)
+            self.conv2 = nn.Conv2d(in_channels=8, out_channels=16, kernel_size=(3,3), stride=2)
         
         # Implementation for Q2.1 and Q2.2
-        raise NotImplementedError
+        self.dropout = nn.Dropout(p=dropout_prob)
+        self.fc1 = nn.Linear(in_features=16*6*6, out_features=320)
+        self.fc2 = nn.Linear(in_features=320, out_features=120)
+        self.fc3 = nn.Linear(in_features=120, out_features=4)
         
     def forward(self, x):
         # input should be of shape [b, c, w, h]
+        x = x.view(-1, 1, 28, 28)
         # conv and relu layers
-
+        x = F.relu(self.conv1(x))
         # max-pool layer if using it
         if not self.no_maxpool:
-            raise NotImplementedError
-        
+            x = F.max_pool2d(x, kernel_size=(2,2), stride=2)
         # conv and relu layers
-        
-
+        x = F.relu(self.conv2(x))
         # max-pool layer if using it
         if not self.no_maxpool:
-            raise NotImplementedError
-        
+            x = F.max_pool2d(x, kernel_size=(2,2), stride=2)
         # prep for fully connected layer + relu
-        
+        x = x.view(-1, self.fc1.in_features)
+        x = F.relu(self.fc1(x))
         # drop out
-        x = self.drop(x)
-
+        x = self.dropout(x)
         # second fully connected layer + relu
-        
+        x = F.relu(self.fc2(x))
         # last fully connected layer
         x = self.fc3(x)
-        
         return F.log_softmax(x,dim=1)
 
 def train_batch(X, y, model, optimizer, criterion, **kwargs):
@@ -102,8 +104,9 @@ def plot(epochs, plottable, ylabel='', name=''):
 
 
 def get_number_trainable_params(model):
-    ## TO IMPLEMENT - REPLACE return 0
-    return 0
+    model_parameters_cnn = filter(lambda p: p.requires_grad, model.parameters())
+    params_cnn = sum([np.prod(p.size()) for p in model_parameters_cnn])
+    return params_cnn
 
 
 def main():
