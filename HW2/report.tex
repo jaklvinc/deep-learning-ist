@@ -119,5 +119,39 @@ The final testing metrics for the transformer were as follows:
 \end{itemize}
 
 \subsection{3.}
+The LSTM decoder in question 1 uses a RNN to process the text input sequentially.
+It maintains a hidden state and a cell state that encode the previous output and the context vector from the encoder.
+The LSTM decoder generates the next output token based on the current input token, the hidden state, and the cell state.
+It doesn't have direct access to the whole encoder output nor to the decoder outputs.
+
+The attention decoder in question 2 uses a transformer to process the text input in parallel, without relying on recurrence.
+It uses an attention mechanism to learn the relevance between the encoder output and the decoder input, and to produce a weighted context vector for each decoder input token.
+The attention decoder generates the next output token based on the current input token, the context vector, and the previous decoder outputs.
+It has direct access to the entire encoder output and the previous decoder outputs.
+The non-reliance on recurrence allows the transformer to be run in parallel, which would explain the speed of training of 15 epochs of the transformer being about 10 minutes faster than the RNN.
+
+The attention decoder in question 2 generally achieves better performance than the LSTM decoder in question 1.
+This is because the attention decoder can capture the long-range dependencies and the global structure of the text input more effectively than the LSTM decoder.
+The LSTM decoder can suffer from the vanishing gradient problem.
 \subsection{4.}
+\b{Jaccard similarity} is a measure of similarity between two sets.
+It is the size of the intersection of the two sets divided by the size of the union of them.
+
+\b{Cosine similarity} is a measure of similarity between two vectors.
+It basically represents the angle between the two vectors.
+The higher the cosine similarity, the smaller the angle and the more similar the two vectors are.
+
+\b{Damerau-Levenstein similarity} is a measure of similarity between two strings.
+It looks at the number of operations (inserion, deletion, transposition, substitution) needed to transform one string into the other.
+It is calculated by subtracting the edit distance from the maximum possible distance, and dividing by the maximum possible distance.
+
+All the similarity measures listed above can be applied to the text input and the text output of the model.
+They differ in the way they measure the similarity.
+The Jaccard similarity only compares the presence and non-presence of tokens.
+It does not take into account the order and the frequency of the tokens.
+The cosine similarity takes only into account the direction of the vectors but not their magnitude.
+Whereas the Damerau-Levenstein similarity focuses on the amount of operations needed to transform one string into another.
+Each of the similarity measures then differs in the way they are calculated and their respective values.
+They can all be used depending on the application and the desired similarity measure.
+
 \end{document}
