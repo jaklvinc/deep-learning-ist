@@ -15,6 +15,7 @@
 \usetikzlibrary{calc}
 \setcounter{secnumdepth}{0}
 \DeclareMathOperator{\softmax}{Softmax}
+\DeclareMathOperator{\diag}{Diag}
 \begin{document}
 \begin{center}
   \mbox{}\\[2.0cm]
@@ -62,7 +63,69 @@ Resulting in a time complexity of $O \left( L^{2}D + L^{2} + L^{2}D \right) = O 
 Where $\phi : \mathbb{R}^{D} \to \mathbb{R}^{M}$ with $M = 1 + D + D^{2}$, if we used $K \geq 3$ terms from the MacLaurin series, we'd have $M = \sum_{i = 0}^{K} D^{i}$.
 \pagebreak
 \subsection{3.}
+\begin{align*}
+  \bm{Z} &= \softmax \left( \bm{Q} \bm{K}^{\top} \right) \bm{V} \\
+         &= \softmax \left( \begin{bmatrix}
+                              \bm{q}_{1}^{\top} \bm{k}_{1} &\bm{q}_{1}^{\top} \bm{k}_{2} &\cdots &\bm{q}_{1}^{\top} \bm{k}_{L} \\
+                              \bm{q}_{2}^{\top} \bm{k}_{1} &\bm{q}_{2}^{\top} \bm{k}_{2} &\cdots &\bm{q}_{2}^{\top} \bm{k}_{L} \\
+                              \vdots &\vdots &\ddots &\vdots \\
+                              \bm{q}_{L}^{\top} \bm{k}_{1} &\bm{q}_{L}^{\top} \bm{k}_{2} &\cdots &\bm{q}_{L}^{\top} \bm{k}_{L} \\
+                            \end{bmatrix} \right) \bm{V} \\
+         &= \begin{bmatrix}
+                              \dfrac{\exp \left( \bm{q}_{1}^{\top} \bm{k}_{1} \right)}{\sum_{j = 1}^{L} \exp \left( \bm{q}_{1}^{\top} \bm{k}_{j} \right)} &\dfrac{\exp \left( \bm{q}_{1}^{\top} \bm{k}_{2} \right)}{\sum_{j = 1}^{L} \exp \left( \bm{q}_{1}^{\top} \bm{k}_{j} \right)} &\cdots &\dfrac{\exp \left( \bm{q}_{1}^{\top} \bm{k}_{L} \right)}{\sum_{j = 1}^{L} \exp \left( \bm{q}_{1}^{\top} \bm{k}_{j} \right)} \\
+              \dfrac{\exp \left( \bm{q}_{2}^{\top} \bm{k}_{1} \right)}{\sum_{j = 1}^{L} \exp \left( \bm{q}_{2}^{\top} \bm{k}_{j} \right)} &\dfrac{\exp \left( \bm{q}_{2}^{\top} \bm{k}_{2} \right)}{\sum_{j = 1}^{L} \exp \left( \bm{q}_{2}^{\top} \bm{k}_{j} \right)} &\cdots &\dfrac{\exp \left( \bm{q}_{2}^{\top} \bm{k}_{L} \right)}{\sum_{j = 1}^{L} \exp \left( \bm{q}_{2}^{\top} \bm{k}_{j} \right)} \\
+                              \vdots &\vdots &\ddots &\vdots \\
+              \dfrac{\exp \left( \bm{q}_{L}^{\top} \bm{k}_{1} \right)}{\sum_{j = 1}^{L} \exp \left( \bm{q}_{L}^{\top} \bm{k}_{j} \right)} &\dfrac{\exp \left( \bm{q}_{L}^{\top} \bm{k}_{2} \right)}{\sum_{j = 1}^{L} \exp \left( \bm{q}_{L}^{\top} \bm{k}_{j} \right)} &\cdots &\dfrac{\exp \left( \bm{q}_{L}^{\top} \bm{k}_{L} \right)}{\sum_{j = 1}^{L} \exp \left( \bm{q}_{L}^{\top} \bm{k}_{j} \right)}
+            \end{bmatrix} \bm{V} \\
+         &= \diag \left( \begin{bmatrix}
+                           \frac{1}{\sum_{j = 1}^{L} \exp \left( \bm{q}_{1}^{\top} \bm{k}_{j} \right)} \\
+                           \vdots \\
+                           \frac{1}{\sum_{j = 1}^{L} \exp \left( \bm{q}_{L}^{\top} \bm{k}_{j} \right)} \\
+                         \end{bmatrix} \right) \begin{bmatrix}
+              \exp \left( \bm{q}_{1}^{\top} \bm{k}_{1} \right) &\exp \left( \bm{q}_{1}^{\top} \bm{k}_{2} \right) &\cdots &\exp \left( \bm{q}_{1}^{\top} \bm{k}_{L} \right) \\
+              \exp \left( \bm{q}_{2}^{\top} \bm{k}_{1} \right) &\exp \left( \bm{q}_{2}^{\top} \bm{k}_{2} \right) &\cdots &\exp \left( \bm{q}_{2}^{\top} \bm{k}_{L} \right) \\
+              \vdots &\vdots &\ddots &\vdots \\
+                                                 \exp \left( \bm{q}_{L}^{\top} \bm{k}_{1} \right) &\exp \left( \bm{q}_{L}^{\top} \bm{k}_{2} \right) &\cdots &\exp \left( \bm{q}_{L}^{\top} \bm{k}_{L} \right) \\
+                                               \end{bmatrix} \bm{V} \\
+         &\approx \diag \left( \begin{bmatrix}
+                           \frac{1}{\sum_{j = 1}^{L} \phi \left( \bm{q}_{1} \right)^{\top} \phi \left( \bm{k}_{j} \right)} \\
+                           \vdots \\
+                           \frac{1}{\sum_{j = 1}^{L} \phi \left( \bm{q}_{L} \right)^{\top} \phi \left( \bm{k}_{j} \right)} \\
+                         \end{bmatrix} \right) \Phi \left( \bm{Q} \right) \Phi \left( \bm{K} \right)^{\top} \bm{V} \\
+         &= \left( \diag \left( \begin{bmatrix}
+                           \sum_{j = 1}^{L} \phi \left( \bm{q}_{1} \right)^{\top} \phi \left( \bm{k}_{j} \right) \\
+                           \vdots \\
+                           \sum_{j = 1}^{L} \phi \left( \bm{q}_{L} \right)^{\top} \phi \left( \bm{k}_{j} \right) \\
+                                \end{bmatrix} \right) \right)^{-1} \Phi \left( \bm{Q} \right) \Phi \left( \bm{K} \right)^{\top} \bm{V} \\
+         &= \left( \diag \left( \begin{bmatrix}
+                                  \phi \left( \bm{q}_{1} \right)^{\top} \phi \left( \bm{k}_{1} \right) &\cdots &\phi \left( \bm{q}_{1} \right)^{\top} \phi \left( \bm{k}_{L} \right)\\
+                                  \vdots &\ddots &\vdots \\
+                                  \phi \left( \bm{q}_{L} \right)^{\top} \phi \left( \bm{k}_{1} \right) &\cdots &\phi \left( \bm{q}_{L} \right)^{\top} \phi \left( \bm{k}_{L} \right)\\
+                                \end{bmatrix} \begin{bmatrix}
+                                                1 \\
+                                                \vdots \\
+                                                1
+                                              \end{bmatrix}\right) \right)^{-1} \Phi \left( \bm{Q} \right) \Phi \left( \bm{K} \right)^{\top} \bm{V} \\
+         &= \left( \diag \left( \Phi \left( \bm{Q} \right) \Phi \left( \bm{K} \right)^{\top} \bm{1}_{L} \right) \right)^{-1} \Phi \left( \bm{Q} \right) \Phi \left( \bm{K} \right)^{\top} \bm{V} \\
+         &= \bm{D}^{-1} \Phi \left( \bm{Q} \right) \Phi \left( \bm{K} \right)^{\top} \bm{V} \\
+\end{align*}
+\pagebreak
 \subsection{4.}
+Given $\bm{Q} \in \mathbb{R}^{L \times D}$, $\bm{K} \in \mathbb{R}^{L \times D}$ and $\bm{V} \in \mathbb{R}^{L \times D}$, to compute $\bm{Z} \approx \bm{D}^{-1} \Phi \left( \bm{Q} \right) \Phi \left( \bm{K} \right)^{\top} \bm{V}$
+\begin{enumerate}
+\item We compute $\Phi \left( \bm{Q} \right)$ and $\Phi \left( \bm{K} \right)$, both can be computed with a complexity of $O \left( L D M\right)$
+\item We compute $\Phi \left( \bm{K} \right)^{\top} \times \bm{V}$ corresponding to a complexity of $O \left(M L D \right)$
+\item We compute $\Phi \left( \bm{Q} \right) \times \Phi \left( \bm{K} \right)^{\top} \bm{V}$ corresponding to a complexity of $O \left( L M D \right)$
+\item To normalize the scores, this is, $\bm{D}^{-1} \times \Phi \left( \bm{Q} \right) \Phi \left( \bm{K} \right)^{\top} \bm{V}$, we need the sums of the rows of $\Phi \left( \bm{Q} \right) \Phi \left( \bm{K} \right)^{\top}$.
+
+  We know that $\left( \Phi \left( \bm{Q} \right) \Phi \left( \bm{K} \right)^{\top} \right)_{i, j} = \phi \left( \bm{q}_{i} \right)^{\top} \phi \left( \bm{k}_{j} \right)$ therefore, the sum of row $i$ is given by $\sum_{j = 1}^{L} \phi \left( \bm{q}_{i} \right)^{\top} \phi \left( \bm{k}_{j} \right) = \phi \left( \bm{q}_{i} \right)^{\top} \sum_{j = 1}^{L} \phi \left( \bm{k}_{j} \right)$.
+  \begin{enumerate}
+  \item $\sum_{j = 1}^{L} \phi \left( \bm{k}_{j} \right)$ can be computed in $O \left( L M \right)$ and stored.
+  \item We reuse $\sum_{j = 1}^{L} \phi \left( \bm{k}_{j} \right)$ to compute $\phi \left( \bm{q}_{i} \right)^{\top} \sum_{j = 1}^{L} \phi \left( \bm{k}_{j} \right)$ for each row $i$, this is done in $O \left( M \right)$, leading to a complexity of $O \left( L M \right)$ for the $L$ rows.
+  \end{enumerate}
+\item Having the sums of the rows, what remains is normalizing the scores, this is, dividing each element of $\Phi \left( \bm{Q} \right) \Phi \left( \bm{K} \right)^{\top} \bm{V} \left( \in \mathbb{R}^{L \times D} \right)$ by a scalar, leading to a complexity of $O \left( LD \right)$
+\end{enumerate}
+This leads us to a complexity of $O \left( LDM + LM + LD \right) = O \left( LDM \right)$
 \section{Question 2}
 \subsection{1.}
 \subsection{2.}
