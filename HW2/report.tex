@@ -126,10 +126,49 @@ Given $\bm{Q} \in \mathbb{R}^{L \times D}$, $\bm{K} \in \mathbb{R}^{L \times D}$
 \item Having the sums of the rows, what remains is normalizing the scores, this is, dividing each element of $\Phi \left( \bm{Q} \right) \Phi \left( \bm{K} \right)^{\top} \bm{V} \left( \in \mathbb{R}^{L \times D} \right)$ by a scalar, leading to a complexity of $O \left( LD \right)$
 \end{enumerate}
 This leads us to a complexity of $O \left( LDM + LM + LD \right) = O \left( LDM \right)$
+\pagebreak
 \section{Question 2}
 \subsection{1.}
+Running 15 epochs with learning rates $0.1$, $0.01$ and $0.001$ we get that the CNN performs best with learning rate $0.01$ with a final validation accuracy of $0.8754$ and final test accuracy of $0.8318$. 
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering \includegraphics[width=.9\linewidth]{plots/CNN-training-loss-0.01-0.7-0-sgd-False}
+  \caption{Training loss per epoch}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/CNN-validation-accuracy-0.01-0.7-0-sgd-False}
+  \caption{Validation accuracy per epoch}
+\end{subfigure}
+\caption{Training metrics for the CNN with the max pooling layers}
+\label{fig:cnn_with_max_pool}
+\end{figure}
+
+As can be seen in Figure~\ref{fig:cnn_with_max_pool}, both the training loss and the validation accuracy consistently improve with each epoch, suggesting that perhaps more epochs would result in a better performance.
 \subsection{2.}
+Running $15$ epochs with the same optimal hyperparameters from Question 2.1 but without max pooling layers and slightly different convolution layers as specified, we get a final validation accuracy of $0.8557$ and final test accuracy of $0.8110$.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering \includegraphics[width=.9\linewidth]{plots/CNN-training-loss-0.01-0.7-0-sgd-True}
+  \caption{Training loss per epoch}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{plots/CNN-validation-accuracy-0.01-0.7-0-sgd-True}
+  \caption{Validation accuracy per epoch}
+\end{subfigure}
+\caption{Training metrics for the CNN \textbf{without} the max pooling layers}
+\label{fig:cnn_without_max_pool}
+\end{figure}
+
+As can be seen in Figure~\ref{fig:cnn_without_max_pool} and as was the case in Question 2.1 both the training loss and the validation accuracy improve with each epoch, suggesting that more epochs could result in a better performance.
 \subsection{3.}
+Through the function get\_number\_trainable\_params we get that the CNNs from Question 2.1 and 2.2 have the same number of trainable parameters, this is, 224892, yet the CNN with max pooling layers (the one from Question 2.1) reaches a better performance for the same hyperparameters and number of epochs.
+This could be because the max pooling layers help to detect the desired features from the images by discarding less relevant features, and introducing translation, rotation and scale invariance into the network, making it more robust to these types of transformations in the input data.
 \section{Question 3}
 \subsection{1.}
 \begin{figure}[H]
