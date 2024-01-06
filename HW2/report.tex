@@ -32,8 +32,8 @@
 
 \section{Contributions of each member}
 \begin{itemize}
-    \item Luis Jose De Macedo Guevara (95621): Q1, Q2
-    \item Vincent Jakl (108529): Q3
+    \item Luis Jose De Macedo Guevara (95621):
+    \item Vincent Jakl (108529):
 \end{itemize}
 \pagebreak
 \section{Question 1}
@@ -44,7 +44,7 @@ In order to determine the time complexity of performing the computation $\bm{Z} 
 \item The softmax transformation applied to matrix $\bm{Q} \bm{K}^{\top}$ (size $L \times L$), which has complexity $O \left( L^{2} \right)$
 \item The matrix multiplication $\softmax \left( \bm{Q} \bm{K}^{\top} \right) \bm{V}$, which has complexity $O \left( L \times L \times D \right) = O \left( L^{2} D \right)$
 \end{enumerate}
-Resulting in a time complexity of $O \left( L^{2}D + L^{2} + L^{2}D \right) = O \left( L^{2} D \right)$, as $D$ is constant we get $O \left( L^{2} \right)$. As we can see, this is a function of the sequence length (and to a lesser extent the hidden size), this means that the complexity grows quadratically as the sequence length grows, making long sequences problematic due to the increase in training time.
+Resulting in a time complexity of $O \left( L^{2}D + L^{2} + L^{2}D \right) = O \left( L^{2} D \right)$. As we can see, this is a function of the sequence length (and to a lesser extent the hidden size), this means that the complexity grows quadratically as the sequence length grows.
 \subsection{2.}
 \begin{align*}
   \exp \left( \bm{q}^{\top} \bm{k} \right) &\approx 1 + \bm{q}^{\top} \bm{k} + \dfrac{\left( \bm{q}^{\top} \bm{k} \right)^{2}}{2} \\
@@ -111,7 +111,7 @@ Where $\phi : \mathbb{R}^{D} \to \mathbb{R}^{M}$ with $M = 1 + D + D^{2}$, if we
 \end{align*}
 \pagebreak
 \subsection{4.}
-Adapted from \footnote{Duman Keles, F., Wijewardena, P.M. \& Hegde, C.. (2023). On The Computational Complexity of Self-Attention. Proceedings of The 34th International Conference on Algorithmic Learning Theory, in Proceedings of Machine Learning Research 201:597-619 Available from \url{https://proceedings.mlr.press/v201/duman-keles23a.html}.}. Given $\bm{Q} \in \mathbb{R}^{L \times D}$, $\bm{K} \in \mathbb{R}^{L \times D}$ and $\bm{V} \in \mathbb{R}^{L \times D}$, to compute $\bm{Z} \approx \bm{D}^{-1} \Phi \left( \bm{Q} \right) \Phi \left( \bm{K} \right)^{\top} \bm{V}$
+Given $\bm{Q} \in \mathbb{R}^{L \times D}$, $\bm{K} \in \mathbb{R}^{L \times D}$ and $\bm{V} \in \mathbb{R}^{L \times D}$, to compute $\bm{Z} \approx \bm{D}^{-1} \Phi \left( \bm{Q} \right) \Phi \left( \bm{K} \right)^{\top} \bm{V}$
 \begin{enumerate}
 \item We compute $\Phi \left( \bm{Q} \right)$ and $\Phi \left( \bm{K} \right)$, both can be computed with a complexity of $O \left( L D M\right)$
 \item We compute $\Phi \left( \bm{K} \right)^{\top} \times \bm{V}$ corresponding to a complexity of $O \left(M L D \right)$
@@ -125,7 +125,7 @@ Adapted from \footnote{Duman Keles, F., Wijewardena, P.M. \& Hegde, C.. (2023). 
   \end{enumerate}
 \item Having the sums of the rows, what remains is normalizing the scores, this is, dividing each element of $\Phi \left( \bm{Q} \right) \Phi \left( \bm{K} \right)^{\top} \bm{V} \left( \in \mathbb{R}^{L \times D} \right)$ by a scalar, leading to a complexity of $O \left( LD \right)$
 \end{enumerate}
-This leads us to a complexity of $O \left( LDM + LM + LD \right) = O \left( LDM \right)$.
+This leads us to a complexity of $O \left( LDM + LM + LD \right) = O \left( LDM \right)$.\footnote{Duman Keles, F., Wijewardena, P.M. \&amp; Hegde, C.. (2023). On The Computational Complexity of Self-Attention. Proceedings of The 34th International Conference on Algorithmic Learning Theory, in Proceedings of Machine Learning Research 201:597-619 Available from https://proceedings.mlr.press/v201/duman-keles23a.html.}
 \pagebreak
 \section{Question 2}
 \subsection{1.}
@@ -259,16 +259,19 @@ The attention decoder in question 2 generally achieves better performance than t
 This is because the attention decoder can capture the long-range dependencies and the global structure of the text input more effectively than the LSTM decoder.
 The LSTM decoder can suffer from the vanishing gradient problem.
 \subsection{4.}
-\b{Jaccard similarity} is a measure of similarity between two sets.
+\begin{itemize}
+    \item \textbf{Jaccard similarity} is a measure of similarity between two sets.
 It is the size of the intersection of the two sets divided by the size of the union of them.
 
-\b{Cosine similarity} is a measure of similarity between two vectors.
+    \item \textbf{Cosine similarity} is a measure of similarity between two vectors.
 It basically represents the angle between the two vectors.
 The higher the cosine similarity, the smaller the angle and the more similar the two vectors are.
 
-\b{Damerau-Levenstein similarity} is a measure of similarity between two strings.
+    \item \textbf{Damerau-Levenstein similarity} is a measure of similarity between two strings.
 It looks at the number of operations (inserion, deletion, transposition, substitution) needed to transform one string into the other.
 It is calculated by subtracting the edit distance from the maximum possible distance, and dividing by the maximum possible distance.
+\end{itemize}
+
 
 All the similarity measures listed above can be applied to the text input and the text output of the model.
 They differ in the way they measure the similarity.
